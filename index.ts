@@ -48,7 +48,7 @@ app.use(
 );
 
 mainApp(app);
-const server = app.listen(port, () => {
+const server = app.listen(process.env.PORT || port, () => {
   console.clear();
   console.log();
   dbConfig();

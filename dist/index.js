@@ -40,7 +40,7 @@ app.use((0, express_session_1.default)({
     store,
 }));
 (0, mainApp_1.mainApp)(app);
-const server = app.listen(port, () => {
+const server = app.listen(process.env.PORT || port, () => {
     console.clear();
     console.log();
     (0, dbConfig_1.dbConfig)();

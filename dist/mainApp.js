@@ -18,7 +18,7 @@ const mainApp = (app) => {
         app.get("/", (req, res) => {
             try {
                 return res.status(200).json({
-                    message: "HMO API",
+                    message: "School API",
                 });
             }
             catch (error) {
