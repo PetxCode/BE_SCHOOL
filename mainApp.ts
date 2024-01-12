@@ -1,22 +1,17 @@
 import { Application, NextFunction, Request, Response } from "express";
-import user from "./router/userRouter";
-import member from "./router/memberRouter";
-import hospital from "./router/hospitalRoute";
-import appontment from "./router/appoinmentRouter";
-import doctor from "./router/doctorRouter";
+import school from "./router/schoolRouter";
+import session from "./router/sessionRouter";
+import staff from "./router/staffRouter";
+
 import { HTTP } from "./utils/enums";
 import { mainError } from "./error/mianError";
 import { handleError } from "./error/handleError";
 
 export const mainApp = (app: Application) => {
   try {
-    app.use("/api", user);
-    app.use("/api", member);
-
-    app.use("/api", hospital);
-    app.use("/api", doctor);
-
-    app.use("/api", appontment);
+    app.use("/api", school);
+    app.use("/api", session);
+    app.use("/api", staff);
 
     app.get("/", (req: Request, res: Response) => {
       try {
