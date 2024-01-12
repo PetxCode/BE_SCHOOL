@@ -11,7 +11,7 @@ import MongoDB from "connect-mongodb-session";
 
 const MongoDBStore = MongoDB(session);
 const store = new MongoDBStore({
-  uri: process.env.MONGO_DB_URL!,
+  uri: process.env.MONGO_DB_URL_ONLINE!,
   collection: "sessions",
 });
 
