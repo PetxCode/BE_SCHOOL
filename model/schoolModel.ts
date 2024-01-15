@@ -10,8 +10,12 @@ interface iSchool {
   schoolName: string;
   address: string;
 
+  plan: string;
+
   session: Array<{}>;
   staff: Array<{}>;
+
+  payments: Array<{}>;
 }
 
 interface iSchoolData extends iSchool, Document {}
@@ -20,6 +24,11 @@ const schoolModel = new Schema<iSchoolData>(
   {
     address: {
       type: String,
+    },
+
+    plan: {
+      type: String,
+      default: "in active",
     },
 
     schoolName: {
@@ -51,6 +60,13 @@ const schoolModel = new Schema<iSchoolData>(
       {
         type: Types.ObjectId,
         ref: "staffs",
+      },
+    ],
+
+    payments: [
+      {
+        type: Types.ObjectId,
+        ref: "payments",
       },
     ],
   },
