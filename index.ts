@@ -1,4 +1,6 @@
 import express, { Application, NextFunction, Request, Response } from "express";
+import helmet from "helmet";
+import morgan from "morgan";
 
 import session from "express-session";
 import cors from "cors";
@@ -7,8 +9,8 @@ import { mainApp } from "./mainApp";
 import { dbConfig } from "./utils/dbConfig";
 dotenv.config();
 
+import { rateLimit } from "express-rate-limit";
 import MongoDB from "connect-mongodb-session";
-
 const MongoDBStore = MongoDB(session);
 const store = new MongoDBStore({
   uri: process.env.MONGO_DB_URL_ONLINE!,
@@ -28,9 +30,20 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 10,
+  message: "Limit exceeded, please try again in 15mins time!!!",
+  // standardHeaders: "draft-7",
+  // legacyHeaders: false,
+});
 app.use(cors({ origin: process.env.APP_URL }));
 app.use(express.json());
 
+app.use(helmet());
+app.use(morgan("dev"));
+
+app.use(limiter);
 app.use(
   session({
     secret: process.env.SESSION_SECRET!,

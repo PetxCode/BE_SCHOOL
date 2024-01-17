@@ -56,7 +56,7 @@ export const createPayment = async (
 
       return res.status(201).json({
         message: "payment created successfully",
-        data: payments,
+        data: school,
       });
     } else {
       return res.status(404).json({
