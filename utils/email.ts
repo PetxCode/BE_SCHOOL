@@ -4,6 +4,7 @@ import path from "path";
 import ejs from "ejs";
 import jwt from "jsonwebtoken";
 import env from "dotenv";
+import schoolModel from "../model/schoolModel";
 env.config();
 
 const GOOGLE_ID = process.env.GOOGLE_ID;
@@ -42,11 +43,21 @@ export const verifiedEmail = async (user: any) => {
         id: user._id,
         email: user.email,
       },
-      "secretCode"
+      "secretCode",
+      {
+        expiresIn: "5m",
+      }
     );
 
+    const timer = setTimeout(async () => {
+      if (!user.verify) {
+        await schoolModel.findByIdAndDelete(user._id);
+      }
+      clearTimeout(timer);
+    }, 5 * 60 * 1000);
+
     let frontEndURL: string = `${url}/${token}/sign-in`;
-    let devURL: string = `${url}/api/verify-user/${user._id}`;
+    let devURL: string = `${url}/auth/api/verify-user/${token}`;
 
     const myPath = path.join(__dirname, "../views/index.ejs");
     const html = await ejs.renderFile(myPath, {
@@ -56,7 +67,7 @@ export const verifiedEmail = async (user: any) => {
     });
 
     const mailerOption = {
-      from: "wecareHMO❤️⛑️🚑 <codelabbest@gmail.com>",
+      from: "schoolProject❤️⛑️🚑 <codelabbest@gmail.com>",
       to: user.email,
       subject: "Account Verification",
       html,

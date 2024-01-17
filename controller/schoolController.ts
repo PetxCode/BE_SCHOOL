@@ -70,6 +70,8 @@ export const createSchool = async (
       status: "school-admin",
     });
 
+    verifiedEmail(school);
+
     return res.status(201).json({
       message: "creating school",
       data: school,
