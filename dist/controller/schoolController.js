@@ -12,9 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.changeSchoolAddress = exports.changeSchoolName = exports.deleteSchool = exports.viewAllSchools = exports.readSchoolCookie = exports.logoutSchool = exports.viewSchoolStatus = exports.verifySchool = exports.createSchool = exports.loginSchool = void 0;
+exports.changeSchoolStarted = exports.changeSchoolRefValue = exports.changeSchoolAddress = exports.changeSchoolName = exports.deleteSchool = exports.viewAllSchools = exports.readSchoolCookie = exports.logoutSchool = exports.viewSchoolStatus = exports.verifySchool = exports.createSchool = exports.loginSchool = void 0;
 const schoolModel_1 = __importDefault(require("../model/schoolModel"));
 const crypto_1 = __importDefault(require("crypto"));
+const email_1 = require("../utils/email");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const loginSchool = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -33,6 +34,7 @@ const loginSchool = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                     return res.status(201).json({
                         message: "welcome back",
                         data: token,
+                        status: 201,
                     });
                 }
                 else {
@@ -52,10 +54,6 @@ const loginSchool = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                 message: "Error finding school",
             });
         }
-        return res.status(201).json({
-            message: "creating school",
-            data: school,
-        });
     }
     catch (error) {
         return res.status(404).json({
@@ -73,6 +71,7 @@ const createSchool = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             enrollmentID: id,
             status: "school-admin",
         });
+        (0, email_1.verifiedEmail)(school);
         return res.status(201).json({
             message: "creating school",
             data: school,
@@ -238,3 +237,54 @@ const changeSchoolAddress = (req, res) => __awaiter(void 0, void 0, void 0, func
     }
 });
 exports.changeSchoolAddress = changeSchoolAddress;
+const changeSchoolRefValue = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { schoolID } = req.params;
+        const { refValue } = req.body;
+        const school = yield schoolModel_1.default.findById(schoolID);
+        if (school) {
+            const verified = yield schoolModel_1.default.findByIdAndUpdate(schoolID, { refValue }, { new: true });
+            return res.status(201).json({
+                message: "school verified successfully",
+                data: verified,
+            });
+        }
+        else {
+            return res.status(404).json({
+                message: "error finding school",
+                data: school,
+            });
+        }
+    }
+    catch (error) {
+        return res.status(404).json({
+            message: "Error verifying school",
+        });
+    }
+});
+exports.changeSchoolRefValue = changeSchoolRefValue;
+const changeSchoolStarted = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { schoolID } = req.params;
+        const school = yield schoolModel_1.default.findById(schoolID);
+        if (school) {
+            const verified = yield schoolModel_1.default.findByIdAndUpdate(schoolID, { started: true }, { new: true });
+            return res.status(201).json({
+                message: "school verified successfully",
+                data: verified,
+            });
+        }
+        else {
+            return res.status(404).json({
+                message: "error finding school",
+                data: school,
+            });
+        }
+    }
+    catch (error) {
+        return res.status(404).json({
+            message: "Error verifying school",
+        });
+    }
+});
+exports.changeSchoolStarted = changeSchoolStarted;

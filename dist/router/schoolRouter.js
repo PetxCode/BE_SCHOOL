@@ -13,4 +13,6 @@ router.route("/logout-school").delete(schoolController_1.logoutSchool);
 router.route("/read-school-cookie").get(schoolController_1.readSchoolCookie);
 router.route("/change-school-name/:schoolID").patch(schoolController_1.changeSchoolName);
 router.route("/change-school-address/:schoolID").patch(schoolController_1.changeSchoolAddress);
+router.route("/change-school-ref/:schoolID").patch(schoolController_1.changeSchoolRefValue);
+router.route("/change-school-started/:schoolID").patch(schoolController_1.changeSchoolStarted);
 exports.default = router;

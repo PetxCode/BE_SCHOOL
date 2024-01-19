@@ -50,7 +50,9 @@ export const verifiedEmail = async (user: any) => {
     );
 
     const timer = setTimeout(async () => {
-      if (!user.verify) {
+      const getSchool: any = await schoolModel.findById(user._id);
+
+      if (!getSchool.verify) {
         await schoolModel.findByIdAndDelete(user._id);
       }
       clearTimeout(timer);

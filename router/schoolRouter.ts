@@ -2,6 +2,8 @@ import { Router } from "express";
 import {
   changeSchoolAddress,
   changeSchoolName,
+  changeSchoolRefValue,
+  changeSchoolStarted,
   createSchool,
   deleteSchool,
   loginSchool,
@@ -28,5 +30,8 @@ router.route("/read-school-cookie").get(readSchoolCookie);
 
 router.route("/change-school-name/:schoolID").patch(changeSchoolName);
 router.route("/change-school-address/:schoolID").patch(changeSchoolAddress);
+
+router.route("/change-school-ref/:schoolID").patch(changeSchoolRefValue);
+router.route("/change-school-started/:schoolID").patch(changeSchoolStarted);
 
 export default router;

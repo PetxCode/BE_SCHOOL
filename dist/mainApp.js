@@ -7,6 +7,7 @@ exports.mainApp = void 0;
 const schoolRouter_1 = __importDefault(require("./router/schoolRouter"));
 const sessionRouter_1 = __importDefault(require("./router/sessionRouter"));
 const staffRouter_1 = __importDefault(require("./router/staffRouter"));
+const paymentRouter_1 = __importDefault(require("./router/paymentRouter"));
 const enums_1 = require("./utils/enums");
 const mianError_1 = require("./error/mianError");
 const handleError_1 = require("./error/handleError");
@@ -15,8 +16,15 @@ const mainApp = (app) => {
         app.use("/api", schoolRouter_1.default);
         app.use("/api", sessionRouter_1.default);
         app.use("/api", staffRouter_1.default);
+        app.use("/api", paymentRouter_1.default);
         app.get("/", (req, res) => {
             try {
+                let count = false;
+                const timer = setTimeout(() => {
+                    count = true;
+                    console.log(count);
+                    clearTimeout(timer);
+                }, 2000);
                 return res.status(200).json({
                     message: "School API",
                 });

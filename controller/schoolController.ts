@@ -28,6 +28,7 @@ export const loginSchool = async (
           return res.status(201).json({
             message: "welcome back",
             data: token,
+            status: 201,
           });
         } else {
           return res.status(404).json({
@@ -44,11 +45,6 @@ export const loginSchool = async (
         message: "Error finding school",
       });
     }
-
-    return res.status(201).json({
-      message: "creating school",
-      data: school,
-    });
   } catch (error) {
     return res.status(404).json({
       message: "Error creating school",
@@ -256,6 +252,73 @@ export const changeSchoolAddress = async (
       const verified = await schoolModel.findByIdAndUpdate(
         schoolID,
         { address },
+        { new: true }
+      );
+
+      return res.status(201).json({
+        message: "school verified successfully",
+        data: verified,
+      });
+    } else {
+      return res.status(404).json({
+        message: "error finding school",
+        data: school,
+      });
+    }
+  } catch (error) {
+    return res.status(404).json({
+      message: "Error verifying school",
+    });
+  }
+};
+
+export const changeSchoolRefValue = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    const { schoolID } = req.params;
+    const { refValue } = req.body;
+
+    const school = await schoolModel.findById(schoolID);
+
+    if (school) {
+      const verified = await schoolModel.findByIdAndUpdate(
+        schoolID,
+        { refValue },
+        { new: true }
+      );
+
+      return res.status(201).json({
+        message: "school verified successfully",
+        data: verified,
+      });
+    } else {
+      return res.status(404).json({
+        message: "error finding school",
+        data: school,
+      });
+    }
+  } catch (error) {
+    return res.status(404).json({
+      message: "Error verifying school",
+    });
+  }
+};
+
+export const changeSchoolStarted = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    const { schoolID } = req.params;
+
+    const school = await schoolModel.findById(schoolID);
+
+    if (school) {
+      const verified = await schoolModel.findByIdAndUpdate(
+        schoolID,
+        { started: true },
         { new: true }
       );
 

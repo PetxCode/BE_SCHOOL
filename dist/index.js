@@ -4,30 +4,43 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const helmet_1 = __importDefault(require("helmet"));
+const morgan_1 = __importDefault(require("morgan"));
 const express_session_1 = __importDefault(require("express-session"));
 const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const mainApp_1 = require("./mainApp");
 const dbConfig_1 = require("./utils/dbConfig");
 dotenv_1.default.config();
+// import { rateLimit } from "express-rate-limit";
 const connect_mongodb_session_1 = __importDefault(require("connect-mongodb-session"));
 const MongoDBStore = (0, connect_mongodb_session_1.default)(express_session_1.default);
 const store = new MongoDBStore({
-    uri: process.env.MONGO_DB_URL_ONLINE,
+    uri: process.env.MONGO_DB_URL,
     collection: "sessions",
 });
 const app = (0, express_1.default)();
 const portServer = process.env.PORT;
 const port = parseInt(portServer);
 app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", process.env.APP_URL);
+    res.header("Access-Control-Allow-Origin", "http://localhost:5174");
     res.header("Access-Control-Allow-Credentials", "true");
     res.header("Access-Control-Allow-Methods", "GET, PUT, PATCH, POST, DELETE");
     res.header("Access-Control-Allow-Headers", "Content-Type");
     next();
 });
-app.use((0, cors_1.default)({ origin: process.env.APP_URL }));
+// const limiter = rateLimit({
+//   windowMs: 15 * 60 * 1000,
+//   limit: 10,
+//   message: "Limit exceeded, please try again in 15mins time!!!",
+//   // standardHeaders: "draft-7",
+//   // legacyHeaders: false,
+// });
+app.use((0, cors_1.default)({ origin: "http://localhost:5174" }));
 app.use(express_1.default.json());
+app.use((0, helmet_1.default)());
+app.use((0, morgan_1.default)("dev"));
+// app.use(limiter);
 app.use((0, express_session_1.default)({
     secret: process.env.SESSION_SECRET,
     resave: false,

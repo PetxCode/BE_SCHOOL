@@ -17,6 +17,15 @@ export const mainApp = (app: Application) => {
 
     app.get("/", (req: Request, res: Response) => {
       try {
+        let count = false;
+
+        const timer = setTimeout(() => {
+          count = true;
+
+          console.log(count);
+          clearTimeout(timer);
+        }, 2000);
+
         return res.status(200).json({
           message: "School API",
         });

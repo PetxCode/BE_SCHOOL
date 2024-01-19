@@ -3,14 +3,17 @@ import { Document, Schema, model } from "mongoose";
 
 interface iSchool {
   email: string;
-  verify: boolean;
   enrollmentID: string;
   status: string;
+  verify: boolean;
+
+  started: boolean;
 
   schoolName: string;
   address: string;
 
   plan: string;
+  refValue: Array<{}>;
 
   session: Array<{}>;
   staff: Array<{}>;
@@ -44,7 +47,13 @@ const schoolModel = new Schema<iSchoolData>(
       type: String,
       unique: true,
     },
+
     verify: {
+      type: Boolean,
+      default: false,
+    },
+
+    started: {
       type: Boolean,
       default: false,
     },
@@ -67,6 +76,12 @@ const schoolModel = new Schema<iSchoolData>(
       {
         type: Types.ObjectId,
         ref: "payments",
+      },
+    ],
+
+    refValue: [
+      {
+        type: {},
       },
     ],
   },

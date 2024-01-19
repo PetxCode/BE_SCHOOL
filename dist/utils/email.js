@@ -19,6 +19,7 @@ const path_1 = __importDefault(require("path"));
 const ejs_1 = __importDefault(require("ejs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const schoolModel_1 = __importDefault(require("../model/schoolModel"));
 dotenv_1.default.config();
 const GOOGLE_ID = process.env.GOOGLE_ID;
 const GOOGLE_SECRET = process.env.GOOGLE_SECRET;
@@ -44,9 +45,18 @@ const verifiedEmail = (user) => __awaiter(void 0, void 0, void 0, function* () {
         const token = jsonwebtoken_1.default.sign({
             id: user._id,
             email: user.email,
-        }, "secretCode");
+        }, "secretCode", {
+            expiresIn: "5m",
+        });
+        const timer = setTimeout(() => __awaiter(void 0, void 0, void 0, function* () {
+            const getSchool = yield schoolModel_1.default.findById(user._id);
+            if (!getSchool.verify) {
+                yield schoolModel_1.default.findByIdAndDelete(user._id);
+            }
+            clearTimeout(timer);
+        }), 5 * 60 * 1000);
         let frontEndURL = `${url}/${token}/sign-in`;
-        let devURL = `${url}/api/verify-user/${user._id}`;
+        let devURL = `${url}/auth/api/verify-user/${token}`;
         const myPath = path_1.default.join(__dirname, "../views/index.ejs");
         const html = yield ejs_1.default.renderFile(myPath, {
             link: devURL,
@@ -54,7 +64,7 @@ const verifiedEmail = (user) => __awaiter(void 0, void 0, void 0, function* () {
             userName: user === null || user === void 0 ? void 0 : user.userName,
         });
         const mailerOption = {
-            from: "wecareHMO❤️⛑️🚑 <codelabbest@gmail.com>",
+            from: "schoolProject❤️⛑️🚑 <codelabbest@gmail.com>",
             to: user.email,
             subject: "Account Verification",
             html,

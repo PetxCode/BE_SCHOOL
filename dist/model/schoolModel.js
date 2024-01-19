@@ -6,6 +6,10 @@ const schoolModel = new mongoose_2.Schema({
     address: {
         type: String,
     },
+    plan: {
+        type: String,
+        default: "in active",
+    },
     schoolName: {
         type: String,
     },
@@ -23,6 +27,10 @@ const schoolModel = new mongoose_2.Schema({
         type: Boolean,
         default: false,
     },
+    started: {
+        type: Boolean,
+        default: false,
+    },
     session: [
         {
             type: mongoose_1.Types.ObjectId,
@@ -33,6 +41,17 @@ const schoolModel = new mongoose_2.Schema({
         {
             type: mongoose_1.Types.ObjectId,
             ref: "staffs",
+        },
+    ],
+    payments: [
+        {
+            type: mongoose_1.Types.ObjectId,
+            ref: "payments",
+        },
+    ],
+    refValue: [
+        {
+            type: {},
         },
     ],
 }, { timestamps: true });
